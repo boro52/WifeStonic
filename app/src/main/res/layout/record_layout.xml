@@ -1,0 +1,28 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <CheckBox
+            android:id="@+id/recordCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tool:text="Test"
+            android:paddingStart="10dp"
+            android:buttonTint="@color/design_default_color_primary"
+            />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

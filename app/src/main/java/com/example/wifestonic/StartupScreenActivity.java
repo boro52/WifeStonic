@@ -9,6 +9,7 @@ import android.view.Window;
 
 public class StartupScreenActivity extends AppCompatActivity {
 
+    // Jest dodany startup_screen_logo.xml ktory jest dodany w activity_startup_screen.xml
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

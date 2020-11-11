@@ -1,0 +1,26 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <EditText
+        android:id="@+id/addNewRecordText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Add new record"
+        android:background="@null"
+    />
+
+    <Button
+        android:id="@+id/addNewRecordButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/addNewRecordText"
+        android:backgroundTint="@android:color/transparent"
+        android:text="Add"
+        android:textColor="@android:color/black"
+        />
+</RelativeLayout>

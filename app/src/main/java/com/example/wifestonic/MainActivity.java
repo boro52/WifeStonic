@@ -2,6 +2,8 @@ package com.example.wifestonic;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,10 +14,16 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    private RecyclerView recordRecyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Tworzymy obiekt ktory odpowiada RecyclerView z activity_main.xml i ustawiamy jego managera
+        recordRecyclerView = findViewById(R.id.mainRecyclerView);
+        recordRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
