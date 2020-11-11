@@ -12,9 +12,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.wifestonic.Adapter.RecordAdapter;
+import com.example.wifestonic.Model.RecordModel;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recordRecyclerView;
+    private RecordAdapter recordAdapter;
+
+    private List<RecordModel> recordModelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +33,30 @@ public class MainActivity extends AppCompatActivity {
         //Tworzymy obiekt ktory odpowiada RecyclerView z activity_main.xml i ustawiamy jego managera
         recordRecyclerView = findViewById(R.id.mainRecyclerView);
         recordRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recordAdapter = new RecordAdapter(this);
+        recordRecyclerView.setAdapter(recordAdapter);
+
+        recordModelList = new ArrayList<>();
+
+        RecordModel model = new RecordModel();
+        model.setId(1);
+        model.setChecked(false);
+        model.setRecordText("Test bardzo");
+
+        recordModelList.add(model);
+        recordModelList.add(model);
+        recordModelList.add(model);
+        recordModelList.add(model);
+        recordModelList.add(model);
+        recordModelList.add(model);
+        recordModelList.add(model);
+        recordModelList.add(model);
+        recordModelList.add(model);
+        recordModelList.add(model);
+        recordModelList.add(model);
+        recordModelList.add(model);
+
+        recordAdapter.setRecord(recordModelList);
     }
 
     @Override
