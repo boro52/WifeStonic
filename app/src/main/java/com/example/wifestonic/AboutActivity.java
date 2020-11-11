@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 public class AboutActivity extends AppCompatActivity {
 
+    //Activity stworzone to użycia menu, dodany powrót do parenta przez dodanie do manifestu
+    //android:parentActivityName=".MainActivity">
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

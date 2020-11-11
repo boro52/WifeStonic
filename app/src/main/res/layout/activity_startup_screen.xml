@@ -8,10 +8,31 @@
     android:background="@color/design_default_color_primary">
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/startupLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher_background"
+        android:paddingBottom="20dp"
+        android:paddingTop="40dp"
+        android:src="@drawable/startup_screen_logo"
         android:layout_centerInParent="true"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/startupLogo"
+        android:layout_centerHorizontal="true"
+        android:text="WifeStonic"
+        android:textSize="40dp"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/startupLogo"
+        android:layout_centerHorizontal="true"
+        android:text="Made by Damian Wołkowicz"
+        android:textSize="20dp"
         />
 
 </RelativeLayout>
