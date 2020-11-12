@@ -1,15 +1,19 @@
 package com.example.wifestonic.Adapter;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wifestonic.Database.DatabaseHandler;
 import com.example.wifestonic.MainActivity;
 import com.example.wifestonic.Model.RecordModel;
+import com.example.wifestonic.NewRecord.RecordAdder;
 import com.example.wifestonic.R;
 
 import java.util.List;
@@ -21,9 +25,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     //Lista wszystkich rekordow
     private List<RecordModel> recordList;
     private MainActivity mainActivity;
+    private DatabaseHandler dataBase;
 
-    public RecordAdapter(MainActivity activity) {
+    public RecordAdapter(MainActivity activity, DatabaseHandler db) {
         mainActivity = activity;
+        dataBase = db;
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -34,9 +40,21 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     // Tworzymy widoki, ktore zostana wyswietlone na ekranie z danych ktore definiuja dany rekord - RecordModel
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        dataBase.accessDatabase();
         RecordModel item = recordList.get(position);
         holder.record.setText(item.getRecordText());
         holder.record.setChecked(item.isChecked());
+        holder.record.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    dataBase.updateRecordStatus(item.getId(), true);
+                }
+                else {
+                    dataBase.updateRecordStatus(item.getId(), false);
+                }
+            }
+        });
     }
 
     @Override
@@ -46,7 +64,18 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     public void setRecord(List<RecordModel> recordList) {
         this.recordList = recordList;
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
+    }
+
+    public void editRecord(int position) {
+        RecordModel model = recordList.get(position);
+        Bundle bundle = new Bundle();
+        bundle.putInt("id", model.getId());
+        bundle.putString("recordText", model.getRecordText());
+
+        RecordAdder adder = new RecordAdder();
+        adder.setArguments(bundle);
+        adder.show(mainActivity.getSupportFragmentManager(), RecordAdder.TAG);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
