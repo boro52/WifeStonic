@@ -13,61 +13,63 @@ import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static int VERSION = 1;
-    private static String NAME = "recordListDatabase";
-    private static String RECORD_TABLE = "record";
-    private static String ID = "id";
-    private static String STATUS = "status";
-    private static String RECORD_TEXT = "recordText";
-    private static String CREATE_RECORD_TABLE = "CREATE TABLE " + RECORD_TABLE + "(" + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                                                + RECORD_TEXT + " TEXT, " + STATUS + " INTEGER)";
-
     private SQLiteDatabase dataBase;
     public DatabaseHandler(Context context) {
-        super(context, NAME, null, VERSION);
+        super(context, DataBaseNames.NAME, null, DataBaseNames.VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_RECORD_TABLE);
+        db.execSQL(DataBaseNames.CREATE_RECORD_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + RECORD_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DataBaseNames.RECORD_TABLE);
     }
 
+    //Otwieramy baze danych do modyfikacji
     public void accessDatabase() {
         dataBase = this.getWritableDatabase();
     }
 
+    //Dodajemy nowy rekord
     public void addRecord(RecordModel model) {
         ContentValues content = new ContentValues();
-        content.put(RECORD_TEXT, model.getRecordText());
-        content.put(STATUS, model.isChecked() ? 1 : 0);
-        dataBase.insert(RECORD_TABLE, null, content);
+        content.put(DataBaseNames.RECORD_TEXT, model.getRecordText());
+        content.put(DataBaseNames.STATUS, model.isChecked() ? 1 : 0);
+        dataBase.insert(DataBaseNames.RECORD_TABLE, null, content);
     }
-//Nic sie nie zmieni dzieki temu
+
+    //Odpytujemy baze danych o wszystkie istniejace rekordy
     public List<RecordModel> getAllRecords() {
         List<RecordModel> list = new ArrayList<>();
         Cursor cursor = null;
+
+        //Rozpoczynamy transakcje, aby nie bylo mozliwosci wykonania innych akcji na bazie danych
         dataBase.beginTransaction();
+
         try{
-            cursor = dataBase.query(RECORD_TABLE, null, null,
+            //dostajemy "wskaznik" na wszystko co zwroci nam zapytanie o tabele
+            cursor = dataBase.query(DataBaseNames.RECORD_TABLE, null, null,
                     null, null, null, null, null);
+            //Jezeli cokolwiek zostalo zwrocone
             if(cursor != null) {
+                //Probujemy odczytac pierwszy element
                 if(cursor.moveToFirst()) {
+                    //Przechodzimy przez wszystkie dane i dodajemy je do modelu, ktory dodajemy do listy modeli
                     do {
                             RecordModel model = new RecordModel();
-                            model.setId(cursor.getInt(cursor.getColumnIndex(ID)));
-                            model.setRecordText(cursor.getString(cursor.getColumnIndex(RECORD_TEXT)));
-                            model.setChecked(cursor.getInt(cursor.getColumnIndex(STATUS)) == 1 ? true : false);
+                            model.setId(cursor.getInt(cursor.getColumnIndex(DataBaseNames.ID)));
+                            model.setRecordText(cursor.getString(cursor.getColumnIndex(DataBaseNames.RECORD_TEXT)));
+                            model.setChecked(cursor.getInt(cursor.getColumnIndex(DataBaseNames.STATUS)) == 1 ? true : false);
                             list.add(model);
                     } while(cursor.moveToNext());
                 }
             }
         }
         finally {
+            //konczymy transakcje aby zwolic baze danych
             dataBase.endTransaction();
             cursor.close();
         }
@@ -75,20 +77,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return list;
     }
 
+    //Aktualizacja samego statusu
     public void updateRecordStatus(int id, boolean status) {
         ContentValues content = new ContentValues();
-        int statusNum = status ? 1 : 0;
-        content.put(STATUS, statusNum);
-        dataBase.update(RECORD_TABLE, content, ID + "=?", new String[] {String.valueOf(id)});
+        int statusNum = status ? 1 : 0; // w bazie danych mamy inty, w RecordModel mamy boolean
+        content.put(DataBaseNames.STATUS, statusNum);
+        dataBase.update(DataBaseNames.RECORD_TABLE, content, DataBaseNames.ID + "=?", new String[]{String.valueOf(id)});
     }
 
+    //Aktualizacja samego tekstu
     public void updateRecordText(int id, String text) {
         ContentValues content = new ContentValues();
-        content.put(RECORD_TEXT, text);
-        dataBase.update(RECORD_TABLE, content, ID + "=?", new String[] {String.valueOf(id)});
+        content.put(DataBaseNames.RECORD_TEXT, text);
+        dataBase.update(DataBaseNames.RECORD_TABLE, content, DataBaseNames.ID + "=?", new String[] {String.valueOf(id)});
     }
 
+    // Usuniecie wpisu w bazie danych
     public void deleteRecord(int id) {
-        dataBase.delete(RECORD_TABLE, ID + "=?", new String[] {String.valueOf(id)});
+        dataBase.delete(DataBaseNames.RECORD_TABLE, DataBaseNames.ID + "=?", new String[] {String.valueOf(id)});
     }
 }

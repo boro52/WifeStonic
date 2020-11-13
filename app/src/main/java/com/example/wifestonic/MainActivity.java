@@ -9,13 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.wifestonic.Adapter.RecordAdapter;
 import com.example.wifestonic.Database.DatabaseHandler;
@@ -38,11 +35,9 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
 
     private List<RecordModel> recordModelList;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+    private void initializeMembers() {
+        //Znajdujemy przycisk i przypisujemy mu onClick
+        //onClick tworzy nowa instacje "RecordAddera" co pozwala na obsluge dodawania nowych rekordow do aplikacji
         addButton = findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,41 +46,37 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
             }
         });
 
-        dataBase = new DatabaseHandler(this);
-        dataBase.accessDatabase();
         //Tworzymy obiekt ktory odpowiada RecyclerView z activity_main.xml i ustawiamy jego managera
         recordRecyclerView = findViewById(R.id.mainRecyclerView);
         recordRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //Tworzymy Handlera do bazy danych i otwieramy ja do odczytu / modyfikacji
+        dataBase = new DatabaseHandler(this);
+        dataBase.accessDatabase();
+
+        //Tworzymy adapter - pozwala on na komunikacje z baza danych i informuje RecyclerView o zmianach
         recordAdapter = new RecordAdapter(this, dataBase);
         recordRecyclerView.setAdapter(recordAdapter);
 
+        // Wypełniamy Liste rekordow pobrana z bazy danych
+        //Obracamy liste, aby ostatnio dodane rekordy byly na gorze
+        //Uzupelniamy liste w adapterze
         recordModelList = new ArrayList<>();
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeHelper(recordAdapter));
-        itemTouchHelper.attachToRecyclerView(recordRecyclerView);
-
         recordModelList = dataBase.getAllRecords();
         Collections.reverse(recordModelList);
         recordAdapter.setRecord(recordModelList);
-//        RecordModel model = new RecordModel();
-//        model.setId(1);
-//        model.setChecked(false);
-//        model.setRecordText("Test bardzo");
-//
-//        recordModelList.add(model);
-//        recordModelList.add(model);
-//        recordModelList.add(model);
-//        recordModelList.add(model);
-//        recordModelList.add(model);
-//        recordModelList.add(model);
-//        recordModelList.add(model);
-//        recordModelList.add(model);
-//        recordModelList.add(model);
-//        recordModelList.add(model);
-//        recordModelList.add(model);
-//        recordModelList.add(model);
-//
-//        recordAdapter.setRecord(recordModelList);
+
+        //Dodajemy helpera, do obslugi ruchu kazdego rekodru
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeHelper(recordAdapter));
+        itemTouchHelper.attachToRecyclerView(recordRecyclerView);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        initializeMembers();
     }
 
     @Override
@@ -104,8 +95,8 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
             case R.id.about:
                 Intent i = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(i);
-                Toast.makeText(this, "About clicked", Toast.LENGTH_SHORT).show();
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -113,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
 
     @Override
     public void handleDialogClose(DialogInterface dialog) {
+        //Metoda z interfejsu ktora jest wolana z "RecordAddera"
+        //po uprzednim dodaniu rekordu do bazy danych przekazujemy liste do adaptera, ktory aktualizuje widok
         recordModelList = dataBase.getAllRecords();
         Collections.reverse(recordModelList);
         recordAdapter.setRecord(recordModelList);

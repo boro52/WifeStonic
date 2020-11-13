@@ -1,19 +1,16 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-
+<!-- Wyglad okienka wyskakujacego do tworzenia / edycji rekordu -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
-    android:background="@color/design_default_color_primary"
-    >
+    android:background="@color/design_default_color_primary">
 
     <EditText
         android:id="@+id/addNewRecordText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Add new record"
-        android:background="@null"
-    />
+        android:background="@null"/>
 
     <Button
         android:id="@+id/addNewRecordButton"
@@ -23,6 +20,5 @@
         android:layout_below="@+id/addNewRecordText"
         android:backgroundTint="@android:color/transparent"
         android:text="Add"
-        android:textColor="@android:color/white"
-        />
+        android:textColor="@android:color/white"/>
 </RelativeLayout>

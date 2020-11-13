@@ -11,8 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:nestedScrollingEnabled="true"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
     <!-- Przycisk który pozwoli na dodawanie kolejnych rekordów do aplikacji -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addButton"
@@ -22,7 +21,5 @@
         android:layout_alignParentRight="true"
         android:layout_margin="20dp"
         android:backgroundTint="@color/design_default_color_primary"
-        android:src="@drawable/add_button"
-        />
-
+        android:src="@drawable/add_button"/>
 </RelativeLayout>

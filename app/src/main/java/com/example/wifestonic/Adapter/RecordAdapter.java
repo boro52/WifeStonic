@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wifestonic.Database.DataBaseNames;
 import com.example.wifestonic.Database.DatabaseHandler;
 import com.example.wifestonic.MainActivity;
 import com.example.wifestonic.Model.RecordModel;
@@ -23,7 +24,6 @@ import java.util.List;
 //Pozwala to na poprawna obsluge danych i wyswietlenie ich we wczesniej stworzonym widoku
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder> {
 
-    //Lista wszystkich rekordow
     private List<RecordModel> recordList;
     private MainActivity mainActivity;
     private DatabaseHandler dataBase;
@@ -45,6 +45,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         RecordModel item = recordList.get(position);
         holder.record.setText(item.getRecordText());
         holder.record.setChecked(item.isChecked());
+
+        //Ustawiamy Listenera, ktory aktualizuje w bazie danych, czy dany rekord jest odhaczony lub nie
         holder.record.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -65,20 +67,24 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     public void setRecord(List<RecordModel> recordList) {
         this.recordList = recordList;
-        //notifyDataSetChanged();
     }
 
+    //Pozwala na edycje danego rekordu
+    //Pobiera intoformacje ktory zostal zmodyfikowany i przekazuje to jako Bundle do RecordAddera
     public void editRecord(int position) {
         RecordModel model = recordList.get(position);
         Bundle bundle = new Bundle();
-        bundle.putInt("id", model.getId());
-        bundle.putString("recordText", model.getRecordText());
+        bundle.putInt(DataBaseNames.ID, model.getId());
+        bundle.putString(DataBaseNames.RECORD_TEXT, model.getRecordText());
 
         RecordAdder adder = new RecordAdder();
         adder.setArguments(bundle);
         adder.show(mainActivity.getSupportFragmentManager(), RecordAdder.TAG);
     }
 
+    //Pozwala na usuniecie rekodru
+    //Zbiera informacje ktory ma zostac usuniety, usuwa go z bazy danych,
+    // z listy oraz powiadamia RecyclerView do aktualizacji widoku
     public void removeRecord(int position) {
         RecordModel model = recordList.get(position);
         dataBase.deleteRecord(model.getId());
@@ -90,6 +96,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         return mainActivity;
     }
 
+    // Klasa zawierajaca widok "kafelka" wyswietlajacego rekord oraz checkbox
     public static class ViewHolder extends RecyclerView.ViewHolder {
         CheckBox record;
 

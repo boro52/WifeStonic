@@ -14,6 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <!-- Dodany styl do wyskakujacego Dialogu, zeby nie zaslaniala go klawiatura -->
     <style name="Dialog" parent="Theme.Design.BottomSheetDialog">
         <item name="android:windowSoftInputMode">adjustResize</item>
         <item name="android:windowIsFloating">false</item>
