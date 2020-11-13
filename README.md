@@ -5,6 +5,8 @@ Aplikacja wzorowana na "listonic" do tworzenia listy zakupów / zadań i odznacz
 
 Dodane zostało zapisywanie danych na telefonie przez SQLite, aby po ponownym uruchomieniu aplikacja mogła załadować poprzenie rekody.
 
+Do implementacji uzywalem API 24.
+
 # Uzycie
 W aplikacji mozemy tworzyc nowe rekordy poprzez uzycie przycisku w dolnym prawym rogu. Kazdy dodany rekord, bedzie pojawial sie na gorze listy.
 
