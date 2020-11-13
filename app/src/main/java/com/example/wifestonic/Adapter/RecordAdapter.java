@@ -1,5 +1,6 @@
 package com.example.wifestonic.Adapter;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,6 +77,17 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         RecordAdder adder = new RecordAdder();
         adder.setArguments(bundle);
         adder.show(mainActivity.getSupportFragmentManager(), RecordAdder.TAG);
+    }
+
+    public void removeRecord(int position) {
+        RecordModel model = recordList.get(position);
+        dataBase.deleteRecord(model.getId());
+        recordList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public Context getContext() {
+        return mainActivity;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

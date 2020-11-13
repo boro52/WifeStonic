@@ -2,6 +2,7 @@ package com.example.wifestonic;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +22,7 @@ import com.example.wifestonic.Database.DatabaseHandler;
 import com.example.wifestonic.Interface.DialogCloseListener;
 import com.example.wifestonic.Model.RecordModel;
 import com.example.wifestonic.NewRecord.RecordAdder;
+import com.example.wifestonic.Touch.SwipeHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -59,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements DialogCloseListen
 
         recordModelList = new ArrayList<>();
 
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeHelper(recordAdapter));
+        itemTouchHelper.attachToRecyclerView(recordRecyclerView);
 
         recordModelList = dataBase.getAllRecords();
         Collections.reverse(recordModelList);
